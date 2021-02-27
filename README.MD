@@ -1,3 +1,3 @@
-# AMAZON CLONE
+# PRO-Store
 
-    Amazon clone for practicing Node and Express.
+This is project made using Reactjs and Expressjs.
