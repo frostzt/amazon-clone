@@ -1,3 +1,3 @@
-# PRO-Store
+# Pro-Store
 
-This is project made using Reactjs and Expressjs.
+This is a project made using Reactjs and Expressjs.

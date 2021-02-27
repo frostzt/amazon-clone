@@ -32,6 +32,11 @@ let UserSchema = mongoose.Schema({
   gender: {
     type: String,
   },
+  role: {
+    type: String,
+    enum: ['user', 'vendor', 'admin'],
+    default: 'user',
+  },
   premium: {
     type: Boolean,
     default: false,
