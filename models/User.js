@@ -39,18 +39,6 @@ let UserSchema = mongoose.Schema({
   bio: {
     type: String,
   },
-  followers: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
-    },
-  ],
-  following: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
-    },
-  ],
 });
 
 // IF PASSWORD IS EVER CHANGED SET THE TIME

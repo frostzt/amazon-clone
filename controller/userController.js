@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 
 const User = require('../models/User');
-const Mood = require('../models/Mood');
 const { handleServerError } = require('../utils/utilHandler');
 
 // CREATE AND SEND THE TOKEN
@@ -280,9 +279,8 @@ exports.deleteUser = async (req, res) => {
     let user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ msg: 'No such user exists!' });
 
-    // DELETE THE USER AND THE CORRESPONDING MOOD PROFILE
+    // DELETE THE USER
     await User.findByIdAndRemove(req.user.id);
-    await Mood.findOneAndRemove({ user: req.user.id });
 
     res.status(204).json({ msg: 'User deleted!' });
   } catch (err) {
