@@ -4,6 +4,7 @@ const morgan = require('morgan');
 // ROUTES
 const authRoute = require('./routes/api/auth');
 const usersRoute = require('./routes/api/users');
+const productRoute = require('./routes/api/product');
 
 const app = express();
 
@@ -19,5 +20,6 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 // DEFINE ROUTES
 app.use('/api/auth', authRoute);
 app.use('/api/users', usersRoute);
+app.use('/api/product', productRoute);
 
 module.exports = app;

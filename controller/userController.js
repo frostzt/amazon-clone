@@ -17,8 +17,8 @@ const createAndSendToken = (user, req, res) => {
 
   jwt.sign(
     payload,
-    process.env.JWTSECRET,
-    { expiresIn: 360000 },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN * 1000 },
     (err, token) => {
       if (err) throw err;
       res.status(200).json({ token });
