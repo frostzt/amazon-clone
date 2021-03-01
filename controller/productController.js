@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 
 const Product = require('../models/Product');
+const User = require('../models/User');
 const { handleServerError } = require('../utils/utilHandler');
 
 // @route   GET api/product
@@ -30,9 +31,42 @@ exports.createProduct = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  if (req.user !== 'vendor') {
+  const user = await User.findById(req.user.id);
+
+  if (user.role !== 'vendor') {
+    console.log(req.user);
     return res
       .status(401)
       .json({ msg: 'Sorry! This feature is only allowed for vendors!' });
+  }
+
+  try {
+    const {
+      name,
+      price,
+      stock,
+      description,
+      ratingsQuantity,
+      ratingsAverage,
+      images,
+    } = req.body;
+
+    const vendor = req.user.id;
+
+    const product = new Product({
+      name,
+      price,
+      stock,
+      vendor,
+      description,
+      ratingsQuantity,
+      ratingsAverage,
+      images,
+    });
+
+    await product.save();
+    res.status(200).json(product);
+  } catch (err) {
+    handleServerError(res, err);
   }
 };

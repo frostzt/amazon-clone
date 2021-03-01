@@ -13,7 +13,7 @@ module.exports = async function (req, res, next) {
 
   try {
     // VERIFY TOKEN
-    const decoded = jwt.verify(token, process.env.JWTSECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // CHECK IF THE USER EXISTS
     const curUser = await User.findById(decoded.user.id);
