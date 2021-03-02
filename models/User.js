@@ -18,17 +18,11 @@ let UserSchema = mongoose.Schema({
   dateofbirth: {
     type: Date,
   },
-  height: {
-    type: Number,
-  },
   passwordChangedAt: {
     type: Date,
   },
   passwordResetToken: String,
   passwordResetExpires: Date,
-  weight: {
-    type: Number,
-  },
   gender: {
     type: String,
   },

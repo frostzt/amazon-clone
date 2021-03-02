@@ -240,11 +240,9 @@ exports.updateUser = async (req, res) => {
   if (!user) return res.status(404).json({ msg: 'User not found' });
 
   // VERIFY FIELDS THAT ARE TYPED BY THE USER
-  let { name, email, dateofbirth, height, weight, gender, bio } = req.body;
+  let { name, email, dateofbirth, gender, bio } = req.body;
 
   name = !name ? user.name : name;
-  height = !height ? user.height : height;
-  weight = !weight ? user.weight : weight;
   bio = !bio ? user.bio : bio;
 
   try {
@@ -252,8 +250,6 @@ exports.updateUser = async (req, res) => {
       name,
       email,
       dateofbirth,
-      height,
-      weight,
       gender,
       bio,
     };
@@ -284,103 +280,6 @@ exports.deleteUser = async (req, res) => {
 
     res.status(204).json({ msg: 'User deleted!' });
   } catch (err) {
-    handleServerError(res, err);
-  }
-};
-
-// @route   PATCH api/users/follow/:userid
-// @desc    Follow a user
-// @access  Private
-exports.followUser = async (req, res) => {
-  try {
-    // GET THE USER TO BE FOLLOWED
-    let followingUser = await User.findById(req.params.userid);
-    if (!followingUser)
-      return res.status(404).json({ msg: 'User does not exist!' });
-
-    // GET THE LOGGED IN USER
-    let user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ msg: 'User does not exist!' });
-
-    // VERIFY THE USER IS NOT FOLLOWING SELF
-    if (req.params.userid.toString() === req.user.id.toString()) {
-      return res.status(400).json({ msg: "You can't follow yourself!" });
-    }
-
-    // VERIFY IF THE USER IS ALREADY FOLLOWING
-    if (
-      followingUser.followers.filter(
-        (user) => user.toString() === req.user.id.toString()
-      ).length > 0
-    ) {
-      return res
-        .status(400)
-        .json({ msg: 'You are already following this user!' });
-    }
-
-    followingUser.followers.unshift(user);
-    user.following.unshift(followingUser);
-
-    await followingUser.save();
-    await user.save();
-
-    res.status(200).json(user);
-  } catch (err) {
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'User does not exist!' });
-    }
-    handleServerError(res, err);
-  }
-};
-
-// @route   PATCH api/users/unfollow/:userid
-// @desc    Unfollow a user
-// @access  Private
-exports.unfollowUser = async (req, res) => {
-  try {
-    // GET THE USER TO BE FOLLOWED
-    let followingUser = await User.findById(req.params.userid);
-    if (!followingUser)
-      return res.status(404).json({ msg: 'User does not exist!' });
-
-    // GET THE LOGGED IN USER
-    let user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ msg: 'User does not exist!' });
-
-    // VERIFY THE USER IS NOT FOLLOWING SELF
-    if (req.params.userid.toString() === req.user.id.toString()) {
-      return res.status(400).json({ msg: "You can't follow yourself!" });
-    }
-
-    // VERIFY IF THE USER IS ALREADY FOLLOWING
-    if (
-      followingUser.followers.filter(
-        (user) => user.toString() === req.user.id.toString()
-      ).length === 0
-    ) {
-      return res.status(400).json({ msg: 'You are not following this user!' });
-    }
-
-    // GET THE REMOVE INDEX AND REMOVE THE USER FROM THE FOLLOWING USERS
-    let removeIndexFollowing = followingUser.followers
-      .map((user) => user)
-      .indexOf(req.user.id);
-    followingUser.followers.splice(removeIndexFollowing, 1);
-
-    // GET THE REMOVE INDEX AND REMOVE THE USER FROM THE LOGGED IN USER
-    let removeIndexLogged = user.following
-      .map((user) => user)
-      .indexOf(req.params.userid);
-    user.following.splice(removeIndexLogged, 1);
-
-    await user.save();
-    await followingUser.save();
-
-    res.status(200).json(user);
-  } catch (err) {
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'User does not exist!' });
-    }
     handleServerError(res, err);
   }
 };

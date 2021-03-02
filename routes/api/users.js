@@ -78,14 +78,4 @@ router.patch(
   userController.changePassword
 );
 
-// @route   PATCH api/users/follow/:userid
-// @desc    Follow a user
-// @access  Private
-router.patch('/follow/:userid', auth, userController.followUser);
-
-// @route   PATCH api/users/unfollow/:userid
-// @desc    Unfollow a user
-// @access  Private
-router.patch('/unfollow/:userid', auth, userController.unfollowUser);
-
 module.exports = router;

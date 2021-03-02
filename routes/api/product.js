@@ -32,4 +32,19 @@ router.post(
   productController.createProduct
 );
 
+// @route   PATCH api/product/:productId
+// @desc    Edit a product
+// @access  Vendor
+router.patch('/:productId', auth, productController.editProduct);
+
+// @route   GET api/product/my-products
+// @desc    Get all products by the vendor
+// @access  Vendor
+router.get('/my-products', auth, productController.getAllProductsByMe);
+
+// @route   DELETE api/product/:productId
+// @desc    Delete a product
+// @access  Vendor
+router.delete('/:productId', auth, productController.deleteProduct);
+
 module.exports = router;
